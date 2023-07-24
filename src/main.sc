@@ -1,24 +1,13 @@
 require: slotfilling/slotFilling.sc
   module = sys.zb-common
 theme: /
-
-    state: Start
-        q!: $regex</start>
-        a: Начнём.
-
+    
     state: Hello
-        intent!: /привет
-        a: Привет привет
+        q: * {(привет | добр* (утро/день/вечер) | здравствуй* ) [робот]} *
+        a: Здравствуй, дорогой гость! Чем могу помочь?
+        go!: /NearestSession
 
-    state: Bye
-        intent!: /пока
-        a: Пока пока
+    state: NearestSession
+        q: * {[как*] ближайш* (сеанс/время/просмотр/фильм*/кин*) [(сегодня/сейчас/[в этот] день)] *
+        a: Ближайший фильм – «Форсаж 15». Он будет сегодня в 18.00. Хотите приобрести билеты?
 
-    state: KnowledgeBase
-        intentGroup!: /KnowledgeBase
-        a: Нашёл ответ в базе знаний!
-        script: $faq.pushReplies();
-
-    state: NoMatch
-        event!: noMatch
-        a: Я не понял. Вы сказали: {{$request.query}}
